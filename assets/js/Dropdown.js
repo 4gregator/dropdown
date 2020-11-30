@@ -2,28 +2,29 @@ class Dropdown {
   constructor(params) {
     // дефолтные значения
     const byDefault = {
-      // имя класса дропдауна
-      dropClass:      'dropdown__input',
-      // имя класса контейнера с опциями
-      containerClass: 'dropdown__container',
-      // имя класса опции дропдауна
-      itemClass:      'dropdown__item',
       // имя класса видимого контейнера с опциями
-      visibleClass:   'dropdown__container_visible',
+      visibleClass: 'dropdown__container_visible',
       // имя класса контейнера со скроллом
-      scrollClass:    'dropdown__container_scrollable',
+      scrollClass:  'dropdown__container_scrollable',
       // имя класса дропдауна, открывающегося вниз
-      bottomClass:    'dropdown__container_bottom',
+      bottomClass:  'dropdown__container_bottom',
+      // имя класса опции дропдауна
+      itemClass:    'dropdown__item',
+      // количество видимых элементов в контейнере опций
+      // в style.scss $fieldSize
+      filedSize:    5,
       //имя класса дропдауна, открывающегося вверх
-      topClass:       'dropdown__container_top',
+      topClass:     'dropdown__container_top',
+      // объект контейнера с опциями
+      field:        document.querySelector('.dropdown__container'),
+      // объект дропдауна
+      drop:         document.querySelector('.dropdown__input'),
       // url ресурса
-      url:            'https://jsonplaceholder.typicode.com/users'
+      url:          'https://jsonplaceholder.typicode.com/users'
     };
 
     this.params = Object.assign(byDefault, params);
 
-    this.drop = document.querySelector('.' + this.params.dropClass);
-    this.field = document.querySelector('.' + this.params.containerClass);
     // список данных для дропдауна
     this.labels = [];
     // отфильтрованные данные для дропдауна
@@ -49,40 +50,46 @@ class Dropdown {
 
   renderDropdown() {
     // очистить поле ввода
-    this.clearHtml(this.drop);
+    this.clearHtml(this.params.drop);
     // наполнить
     this.filterOptions();
-    this.field.classList.add(this.params.visibleClass);
+    this.params.field.classList.add(this.params.visibleClass);
     // проверить влазит или нет
     const direction = this.checkExpanse() ? this.params.bottomClass : this.params.topClass;
     // рендерить 
-    this.field.classList.add(direction);
+    this.params.field.classList.add(direction);
   }
 
   closeDropdown() {
-    this.field.classList.remove(this.params.visibleClass, this.params.bottomClass, this.params.topClass);
+    this.params.field.classList.remove(this.params.visibleClass, this.params.bottomClass, this.params.topClass);
   }
 
   fillOptions() {
-    this.clearHtml(this.field);
+    this.clearHtml(this.params.field);
 
     this.filterLabels.forEach(el => {
       let option = this.createOption(el.label, el.id);
-      this.field.appendChild(option);
+      this.params.field.appendChild(option);
     });
 
     this.checkScroll();
   }
 
   checkExpanse() {
-    let offset = this.drop.getClientRects()[0].y + this.drop.offsetHeight;
+    let offset = this.params.drop.getClientRects()[0].y + this.params.drop.offsetHeight;
 
-    return window.innerHeight - offset >= this.field.offsetHeight;
+    return window.innerHeight - offset >= this.params.field.offsetHeight;
   }
 
   checkScroll() {
-    if (this.filterLabels.length > 5 && !this.field.classList.contains(this.params.scrollClass)) this.field.classList.add(this.params.scrollClass);
-    else if (this.filterLabels.length <= 5 && this.field.classList.contains(this.params.scrollClass)) this.field.classList.remove(this.params.scrollClass);
+    if (
+      this.filterLabels.length > this.params.filedSize
+      && !this.params.field.classList.contains(this.params.scrollClass)
+    ) this.params.field.classList.add(this.params.scrollClass);
+    else if (
+      this.filterLabels.length <= this.params.filedSize
+      && this.params.field.classList.contains(this.params.scrollClass)
+    ) this.params.field.classList.remove(this.params.scrollClass);
   }
 
   createOption(label, id) {
@@ -94,7 +101,7 @@ class Dropdown {
     span.setAttribute('data-id', id);
 
     span.addEventListener('click', function () {
-      self.drop.textContent = label;
+      self.params.drop.textContent = label;
       self.optionVal = label;
       self.optionID = id;
       self.closeDropdown();
@@ -105,7 +112,7 @@ class Dropdown {
 
   filterOptions() {
     const self = this;
-    const input = this.drop.textContent.toLowerCase();
+    const input = this.params.drop.textContent.toLowerCase();
     const matches = [];
 
     this.labels.forEach(function (el) {
@@ -122,8 +129,8 @@ class Dropdown {
   }
 
   loseFocus() {
-    this.drop.blur();
-    this.drop.textContent = this.optionVal;
+    this.params.drop.blur();
+    this.params.drop.textContent = this.optionVal;
     this.closeDropdown();
   }
 
@@ -144,8 +151,8 @@ class Dropdown {
       });
     });
 
-    this.drop.addEventListener('focus', this.renderDropdown.bind(this));
-    this.drop.addEventListener('keydown', function (e) {
+    this.params.drop.addEventListener('focus', this.renderDropdown.bind(this));
+    this.params.drop.addEventListener('keydown', function (e) {
       if (e.keyCode == 13) {
         //enter
         e.preventDefault();
@@ -154,21 +161,21 @@ class Dropdown {
         self.loseFocus();
       }
     });
-    // this.drop.addEventListener('keyup', function (e) {
+    // this.params.drop.addEventListener('keyup', function (e) {
     //   if (e.keyCode == 27) {
     //     // esc
     //     self.loseFocus();
     //   }
     // });
-    this.drop.addEventListener('input', this.filterOptions.bind(this));
+    this.params.drop.addEventListener('input', this.filterOptions.bind(this));
     window.addEventListener('resize', function () {
-      if ( self.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
+      if ( self.params.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
     });
     document.addEventListener('scroll', function (e) {
-      if ( self.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
+      if ( self.params.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
     });
     document.addEventListener('click', function (e) {
-      if (e.target != self.drop) self.loseFocus();
+      if (e.target != self.params.drop) self.loseFocus();
     });
   }
 }

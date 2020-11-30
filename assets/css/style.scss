@@ -1,5 +1,6 @@
 $dropdownHeight: 30px;
 $dropdownBorder: 1px solid #777;
+$fieldSize: 5;
 
 %dropdownElement {
   height: $dropdownHeight;
@@ -54,7 +55,7 @@ $dropdownBorder: 1px solid #777;
     left: 0;
     display: none;
     width: 100%;
-    max-height: $dropdownHeight*5;
+    max-height: $dropdownHeight*$fieldSize;
     border-right: $dropdownBorder;
     border-left: $dropdownBorder;
     background-color: #fff;
