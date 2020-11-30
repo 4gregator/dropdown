@@ -20,16 +20,10 @@ class Dropdown {
       url:            'https://jsonplaceholder.typicode.com/users'
     };
 
-    params = Object.assign(byDefault, params);
+    this.params = Object.assign(byDefault, params);
 
-    this.drop = document.querySelector('.' + params.dropClass);
-    this.field = document.querySelector('.' + params.containerClass);
-    this.option = params.itemClass;
-    this.visible = params.visibleClass;
-    this.scroll = params.scrollClass;
-    this.dropBottom = params.bottomClass;
-    this.dropTop = params.topClass;
-    this.url = params.url;
+    this.drop = document.querySelector('.' + this.params.dropClass);
+    this.field = document.querySelector('.' + this.params.containerClass);
     // список данных для дропдауна
     this.labels = [];
     // отфильтрованные данные для дропдауна
@@ -44,7 +38,7 @@ class Dropdown {
   async getData() {
     let data;
 
-    await fetch(this.url)
+    await fetch(this.params.url)
       .then(response => response.json())
       .then(json => {
         data = json;
@@ -58,15 +52,15 @@ class Dropdown {
     this.clearHtml(this.drop);
     // наполнить
     this.filterOptions();
-    this.field.classList.add(this.visible);
+    this.field.classList.add(this.params.visibleClass);
     // проверить влазит или нет
-    const direction = this.checkExpanse() ? this.dropBottom : this.dropTop;
+    const direction = this.checkExpanse() ? this.params.bottomClass : this.params.topClass;
     // рендерить 
     this.field.classList.add(direction);
   }
 
   closeDropdown() {
-    this.field.classList.remove(this.visible, this.dropBottom, this.dropTop);
+    this.field.classList.remove(this.params.visibleClass, this.params.bottomClass, this.params.topClass);
   }
 
   fillOptions() {
@@ -87,15 +81,15 @@ class Dropdown {
   }
 
   checkScroll() {
-    if (this.filterLabels.length > 5 && !this.field.classList.contains(this.scroll)) this.field.classList.add(this.scroll);
-    else if (this.filterLabels.length <= 5 && this.field.classList.contains(this.scroll)) this.field.classList.remove(this.scroll);
+    if (this.filterLabels.length > 5 && !this.field.classList.contains(this.params.scrollClass)) this.field.classList.add(this.params.scrollClass);
+    else if (this.filterLabels.length <= 5 && this.field.classList.contains(this.params.scrollClass)) this.field.classList.remove(this.params.scrollClass);
   }
 
   createOption(label, id) {
     const self = this;
     let span = document.createElement('span');
 
-    span.className = this.option;
+    span.className = this.params.itemClass;
     span.textContent = label;
     span.setAttribute('data-id', id);
 
@@ -155,24 +149,26 @@ class Dropdown {
       if (e.keyCode == 13) {
         //enter
         e.preventDefault();
-      }
-    });
-    this.drop.addEventListener('keyup', function (e) {
-      if (e.keyCode == 27) {
+      } else if (e.keyCode == 27) {
         // esc
         self.loseFocus();
       }
     });
+    // this.drop.addEventListener('keyup', function (e) {
+    //   if (e.keyCode == 27) {
+    //     // esc
+    //     self.loseFocus();
+    //   }
+    // });
     this.drop.addEventListener('input', this.filterOptions.bind(this));
     window.addEventListener('resize', function () {
-      if ( self.field.classList.contains(self.visible) ) self.loseFocus();
+      if ( self.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
     });
     document.addEventListener('scroll', function (e) {
-      if ( self.field.classList.contains(self.visible) ) self.loseFocus();
+      if ( self.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
     });
     document.addEventListener('click', function (e) {
       if (e.target != self.drop) self.loseFocus();
     });
-
   }
 }

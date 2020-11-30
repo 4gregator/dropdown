@@ -53,13 +53,13 @@
   width: 100%;
   max-height: 150px;
   border-right: 1px solid #777;
-  border-bottom: 1px solid #777;
   border-left: 1px solid #777;
   background-color: #fff;
   z-index: 1;
 }
 .dropdown__container_bottom {
   top: 30px;
+  border-bottom: 1px solid #777;
 }
 .dropdown__container_bottom ~ .dropdown__input {
   border-bottom-right-radius: 0;
@@ -67,6 +67,7 @@
 }
 .dropdown__container_top {
   bottom: 30px;
+  border-top: 1px solid #777;
 }
 .dropdown__container_top ~ .dropdown__input {
   border-top-right-radius: 0;

@@ -56,13 +56,13 @@ $dropdownBorder: 1px solid #777;
     width: 100%;
     max-height: $dropdownHeight*5;
     border-right: $dropdownBorder;
-    border-bottom: $dropdownBorder;
     border-left: $dropdownBorder;
     background-color: #fff;
     z-index: 1;
 
     &_bottom {
       top: $dropdownHeight;
+      border-bottom: $dropdownBorder;
 
       & ~ .dropdown__input {
         border-bottom-right-radius: 0;
@@ -72,6 +72,7 @@ $dropdownBorder: 1px solid #777;
 
     &_top {
       bottom: $dropdownHeight;
+      border-top: $dropdownBorder;
 
       & ~ .dropdown__input {
         border-top-right-radius: 0;
