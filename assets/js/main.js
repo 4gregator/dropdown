@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const dropdown = new Dropdown('dropdown__input', 'dropdown__container', 'dropdown__item', 'dropdown__container_visible', 'dropdown__container_scrollable', 'dropdown__container_bottom', 'dropdown__container_top');
+  const params = {
+    dropClass: 'dropdown__input',
+    containerClass: 'dropdown__container',
+    itemClass: 'dropdown__item',
+    visibleClass: 'dropdown__container_visible',
+    scrollClass: 'dropdown__container_scrollable',
+    bottomClass: 'dropdown__container_bottom',
+    topClass: 'dropdown__container_top'
+  };
+  const dropdown = new Dropdown(params);
 
   dropdown.initialize();
 });

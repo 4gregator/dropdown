@@ -1,19 +1,19 @@
 class Dropdown {
-  constructor(dropClass, containerClass, itemClass, visibleClass, scrollClass, bottomClass, topClass) {
+  constructor(params) {
     // имя класса дропдауна
-    this.drop = document.querySelector('.' + dropClass);
+    this.drop = document.querySelector('.' + params.dropClass);
     // имя класса контейнера с опциями
-    this.field = document.querySelector('.' + containerClass);
+    this.field = document.querySelector('.' + params.containerClass);
     // имя класса опции дропдауна
-    this.option = itemClass;
+    this.option = params.itemClass;
     // имя класса видимого контейнера с опциями
-    this.visible = visibleClass;
+    this.visible = params.visibleClass;
     // имя класса контейнера со скроллом
-    this.scroll = scrollClass;
+    this.scroll = params.scrollClass;
     // имя класса дропдауна, открывающегося вниз
-    this.dropBottom = bottomClass;
+    this.dropBottom = params.bottomClass;
     //имя класса дропдауна, открывающегося вверх
-    this.dropTop = topClass;
+    this.dropTop = params.topClass;
     // url ресурса
     this.url = 'https://jsonplaceholder.typicode.com/users';
     // список данных для дропдауна
