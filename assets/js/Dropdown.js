@@ -145,30 +145,18 @@ class Dropdown {
       if (e.keyCode == 27) {
         // esc
         self.loseFocus();
-      } else if (e.keyCode == 38) {
-        //arrowup
-      } else if (e.keyCode == 40) {
-        //down
-      } else if (
-        e.keyCode == 8 || //backspace
-        e.keyCode == 32 || //space
-        e.keyCode == 46 || //delete
-        e.keyCode >= 65 && e.keyCode <= 90 //только буквы
-      ) {
-        self.filterOptions();
       }
     });
+    this.drop.addEventListener('input', this.filterOptions.bind(this));
     window.addEventListener('resize', function () {
       if ( self.field.classList.contains(self.visible) ) self.loseFocus();
     });
     document.addEventListener('scroll', function (e) {
       if ( self.field.classList.contains(self.visible) ) self.loseFocus();
     });
-    // this.field.addEventListener('scroll', function (e) {
-    //   e.stopPropagation();
-    // });
     document.addEventListener('click', function (e) {
       if (e.target != self.drop) self.loseFocus();
-    })
+    });
+
   }
 }
