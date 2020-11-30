@@ -1,29 +1,35 @@
 class Dropdown {
-  constructor({
-    dropClass = 'dropdown__input',
-    containerClass = 'dropdown__container',
-    itemClass = 'dropdown__item',
-    visibleClass = 'dropdown__container_visible',
-    scrollClass = 'dropdown__container_scrollable',
-    bottomClass = 'dropdown__container_bottom',
-    topClass = 'dropdown__container_top'
-  }) {
-    // имя класса дропдауна
-    this.drop = document.querySelector('.' + dropClass);
-    // имя класса контейнера с опциями
-    this.field = document.querySelector('.' + containerClass);
-    // имя класса опции дропдауна
-    this.option = itemClass;
-    // имя класса видимого контейнера с опциями
-    this.visible = visibleClass;
-    // имя класса контейнера со скроллом
-    this.scroll = scrollClass;
-    // имя класса дропдауна, открывающегося вниз
-    this.dropBottom = bottomClass;
-    //имя класса дропдауна, открывающегося вверх
-    this.dropTop = topClass;
-    // url ресурса
-    this.url = 'https://jsonplaceholder.typicode.com/users';
+  constructor(params) {
+    // дефолтные значения
+    const byDefault = {
+      // имя класса дропдауна
+      dropClass:      'dropdown__input',
+      // имя класса контейнера с опциями
+      containerClass: 'dropdown__container',
+      // имя класса опции дропдауна
+      itemClass:      'dropdown__item',
+      // имя класса видимого контейнера с опциями
+      visibleClass:   'dropdown__container_visible',
+      // имя класса контейнера со скроллом
+      scrollClass:    'dropdown__container_scrollable',
+      // имя класса дропдауна, открывающегося вниз
+      bottomClass:    'dropdown__container_bottom',
+      //имя класса дропдауна, открывающегося вверх
+      topClass:       'dropdown__container_top',
+      // url ресурса
+      url:            'https://jsonplaceholder.typicode.com/users'
+    };
+
+    params = Object.assign(byDefault, params);
+
+    this.drop = document.querySelector('.' + params.dropClass);
+    this.field = document.querySelector('.' + params.containerClass);
+    this.option = params.itemClass;
+    this.visible = params.visibleClass;
+    this.scroll = params.scrollClass;
+    this.dropBottom = params.bottomClass;
+    this.dropTop = params.topClass;
+    this.url = params.url;
     // список данных для дропдауна
     this.labels = [];
     // отфильтрованные данные для дропдауна
@@ -31,6 +37,8 @@ class Dropdown {
     // выбранная опция
     this.optionVal = '';
     this.optionID = 0;
+
+    this.initialize();
   }
   
   async getData() {
