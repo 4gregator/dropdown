@@ -1,0 +1,124 @@
+$dropdownHeight: 30px;
+$dropdownBorder: 1px solid #777;
+
+%dropdownElement {
+  height: $dropdownHeight;
+  padding: 4px 13px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:active, :hover, :focus {
+  outline: 0;
+  outline-offset: 0;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 0 40px;
+}
+
+.dropdown {
+  position: relative;
+  width: 400px;
+
+  &__input {
+    display: block;
+    @extend %dropdownElement;
+    border: $dropdownBorder;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    font-size: 17px;
+
+    &:after {
+      content: '▼';
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0 4px;
+      height: 100%;
+      line-height: $dropdownHeight;
+      border-left: 1px solid #777;
+      cursor: pointer;
+    }
+  }
+
+  &__container {
+    position: absolute;
+    left: 0;
+    display: none;
+    width: 100%;
+    max-height: $dropdownHeight*5;
+    border-right: $dropdownBorder;
+    border-bottom: $dropdownBorder;
+    border-left: $dropdownBorder;
+    background-color: #fff;
+    z-index: 1;
+
+    &_bottom {
+      top: $dropdownHeight;
+
+      & ~ .dropdown__input {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    &_top {
+      bottom: $dropdownHeight;
+
+      & ~ .dropdown__input {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+      }
+    }
+
+    &_visible {
+      display: block;
+    }
+
+    &_scrollable {
+      overflow-y: scroll;
+    }
+  }
+
+  &__item {
+    display: block;
+    @extend %dropdownElement;
+    transition-duration: 300ms;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(#888, 0.4);
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .container {
+    padding: 0 0;
+  }
+
+  .dropdown {
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 440px) {
+  .dropdown {
+    width: 80%;
+  }
+}
