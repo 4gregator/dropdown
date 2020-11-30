@@ -99,9 +99,6 @@ class Dropdown {
     const matches = [];
 
     this.labels.forEach(function (el) {
-      console.log(input);
-      console.log(el['label'].toLowerCase());
-      console.log(el['label'].toLowerCase().startsWith(input));
       if ( el['label'].toLowerCase().startsWith(input) ) matches.push(el);
     });
 
