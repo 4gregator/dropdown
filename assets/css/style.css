@@ -88,6 +88,9 @@
 .dropdown__item:hover {
   background-color: rgba(136, 136, 136, 0.4);
 }
+.dropdown__item_hover {
+  background-color: rgba(136, 136, 136, 0.4);
+}
 
 @media screen and (max-width: 991px) {
   .container {

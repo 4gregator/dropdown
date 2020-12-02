@@ -8,6 +8,8 @@ class Dropdown {
       scrollClass:  'dropdown__container_scrollable',
       // имя класса дропдауна, открывающегося вниз
       bottomClass:  'dropdown__container_bottom',
+      // имя класса ховера опции
+      hoverClass:   'dropdown__item_hover',
       // имя класса опции дропдауна
       itemClass:    'dropdown__item',
       // количество видимых элементов в контейнере опций
@@ -32,6 +34,8 @@ class Dropdown {
     // выбранная опция
     this.optionVal = '';
     this.optionID = 0;
+    // порядковый номер опции
+    this.itemNumber = 0;
 
     this.initialize();
   }
@@ -128,6 +132,28 @@ class Dropdown {
     this.fillOptions();
   }
 
+  pickItem(key) {
+    const items = this.params.field.querySelectorAll('.' + this.params.itemClass);
+    // смещение вверх (true) или вниз (false)
+    const bias = key == 38 ? true : false;
+    let newPick = true;
+
+    items.forEach(el => {
+      if (el.classList.contains(this.params.hoverClass)) {
+        newPick = false;
+        el.classList.remove(this.params.hoverClass);
+      }
+    });
+
+    if (newPick && bias) this.itemNumber = items.length - 1;
+    else if (newPick && !bias) this.itemNumber = 0;
+    else if (!newPick && bias) this.itemNumber != 0 ? this.itemNumber-- : this.itemNumber = items.length - 1;
+    else this.itemNumber < items.length - 1 ? this.itemNumber++ : this.itemNumber = 0;
+
+    items[this.itemNumber].classList.add(this.params.hoverClass);
+    items[this.itemNumber].scrollIntoView();
+  }
+
   loseFocus() {
     this.params.drop.blur();
     this.params.drop.textContent = this.optionVal;
@@ -153,27 +179,31 @@ class Dropdown {
 
     this.params.drop.addEventListener('focus', this.renderDropdown.bind(this));
     this.params.drop.addEventListener('keydown', function (e) {
-      if (e.keyCode == 13) {
+      if (e.keyCode == 38 || e.keyCode == 40) {
+        // key up & down
+        e.preventDefault();
+        self.pickItem(e.keyCode);
+      } else if (e.keyCode == 13) {
         //enter
         e.preventDefault();
+        const item = document.querySelector('.' + self.params.hoverClass);
+        if (item !== null) item.click();
       } else if (e.keyCode == 27) {
         // esc
         self.loseFocus();
       }
     });
-    // this.params.drop.addEventListener('keyup', function (e) {
-    //   if (e.keyCode == 27) {
-    //     // esc
-    //     self.loseFocus();
-    //   }
-    // });
+
     this.params.drop.addEventListener('input', this.filterOptions.bind(this));
+
     window.addEventListener('resize', function () {
       if ( self.params.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
     });
+
     document.addEventListener('scroll', function (e) {
       if ( self.params.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
     });
+    
     document.addEventListener('click', function (e) {
       if (e.target != self.params.drop) self.loseFocus();
     });
