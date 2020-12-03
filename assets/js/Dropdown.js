@@ -36,6 +36,8 @@ class Dropdown {
     this.optionID = 0;
     // порядковый номер опции
     this.itemNumber = 0;
+    // отслежевание ховера на опциях
+    this.isHovered = false;
 
     this.initialize();
   }
@@ -178,16 +180,23 @@ class Dropdown {
     });
 
     this.params.drop.addEventListener('focus', this.renderDropdown.bind(this));
+    
     this.params.drop.addEventListener('keydown', function (e) {
       if (e.keyCode == 38 || e.keyCode == 40) {
         // key up & down
         e.preventDefault();
-        self.pickItem(e.keyCode);
+
+        if (!self.isHovered) {
+          self.pickItem(e.keyCode);
+        }
       } else if (e.keyCode == 13) {
         //enter
         e.preventDefault();
+
         const item = document.querySelector('.' + self.params.hoverClass);
-        if (item !== null) item.click();
+        if (item !== null) {
+          item.click();
+        }
       } else if (e.keyCode == 27) {
         // esc
         self.loseFocus();
@@ -195,6 +204,18 @@ class Dropdown {
     });
 
     this.params.drop.addEventListener('input', this.filterOptions.bind(this));
+
+    this.params.field.addEventListener('mouseenter', function () {
+      const item = document.querySelector('.' + self.params.hoverClass);
+
+      if (item !== null) item.classList.remove(self.params.hoverClass);
+
+      self.isHovered = true;
+    });
+
+    this.params.field.addEventListener('mouseleave', function () {
+      self.isHovered = false;
+    });
 
     window.addEventListener('resize', function () {
       if ( self.params.field.classList.contains(self.params.visibleClass) ) self.loseFocus();
